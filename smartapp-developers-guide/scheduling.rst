@@ -279,6 +279,37 @@ Using them is similar to other scheduling methods:
 
 ----
 
+Passing Data to the Handler Method
+--------------------------------------
+
+Sometimes it is useful to pass data to the handler method. This is possible by passing in a map as the last
+argument to the various schedule methods with ``data`` as the key and another map as the value.
+
+.. code-block:: groovy
+    :emphasize-lines: 2
+
+    def someEventHandler(evt) {
+        runIn(60, handler, [data: [flag: true]])
+    }
+
+    def handler(data) {
+        if (data.flag) {
+            theswitch.off()
+        }
+    }
+
+By passing data directly to the handler method, you can avoid having to store data in the SmartApp or Device Handler state. Data can be passed
+in this fashion to any of the schedule methods: ``runIn()``, ``runOnce()``, ``schedule()``, ``runEveryXMinutes()``, and ``runEveryXHours()``.
+
+To also specify the overwrite flag, pass it as an additional property in the map: ``[overwrite: false, data: [foo: 'bar']]``.
+
+.. note::
+
+    Similar to the state, only data that can be serialized can be passed to the handler. The data is also limited to 2500 characters after being serialized.
+    If the size exceeds the maximum number of characters, an exception of type ``physicalgraph.exception.DataCharacterLimitExceededException`` will be thrown.
+
+----
+
 Removing Scheduled Executions
 -----------------------------
 
